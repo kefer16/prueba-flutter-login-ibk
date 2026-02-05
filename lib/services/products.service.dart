@@ -1,12 +1,20 @@
 import 'dart:convert';
+import 'package:flutter_prueba_ibk/databases/product_dao.dart';
 import 'package:flutter_prueba_ibk/models/product.model.dart';
 import 'package:http/http.dart' as http;
 
 class ProductsRepository {
   final String _baseUrl = 'http://demo8356743.mockable.io/ibk_get_products';
+  final ProductDao _dao = ProductDao();
 
   Future<List<ProductModel>> getProducts() async {
     try {
+      final localData = await _dao.getProductsCache();
+
+      if (localData.isNotEmpty) {
+        return localData;
+      }
+
       final response = await http.get(
         Uri.parse(_baseUrl),
         headers: {'Content-Type': 'application/json'},
@@ -16,7 +24,12 @@ class ProductsRepository {
         final Map<String, dynamic> data = jsonDecode(response.body);
         final List productsJson = data['products'];
 
-        return productsJson.map((json) => ProductModel.fromJson(json)).toList();
+        final result = productsJson
+            .map((json) => ProductModel.fromJson(json))
+            .toList();
+
+        await _dao.insertAllCache(result);
+        return result;
       } else {
         return [];
       }
