@@ -5,6 +5,7 @@ class ProductModel {
   String nameMoney;
   String symbolMoney;
   String amount;
+  int isLogout;
 
   ProductModel({
     this.typeAccount = 0,
@@ -13,6 +14,7 @@ class ProductModel {
     this.nameMoney = "",
     this.symbolMoney = "",
     this.amount = "",
+    this.isLogout = 0,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class ProductModel {
       nameMoney: json['nameMoney'],
       symbolMoney: json['symbolMoney'],
       amount: json['amount'],
+      isLogout: json['isLogout'],
     );
   }
 }

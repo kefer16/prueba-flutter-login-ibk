@@ -7,11 +7,11 @@ class ProductsRepository {
   final String _baseUrl = 'http://demo8356743.mockable.io/ibk_get_products';
   final ProductDao _dao = ProductDao();
 
-  Future<List<ProductModel>> getProducts() async {
+  Future<List<ProductModel>> getProducts(bool isRefresh) async {
     try {
       final localData = await _dao.getProductsCache();
 
-      if (localData.isNotEmpty) {
+      if (localData.isNotEmpty && !isRefresh) {
         return localData;
       }
 
@@ -28,6 +28,7 @@ class ProductsRepository {
             .map((json) => ProductModel.fromJson(json))
             .toList();
 
+        await _dao.deleteAllProducts();
         await _dao.insertAllCache(result);
         return result;
       } else {

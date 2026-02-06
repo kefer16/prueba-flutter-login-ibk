@@ -1,4 +1,4 @@
-import 'package:flutter_prueba_ibk/databases/bd_product.dart';
+import 'package:flutter_prueba_ibk/databases/product_db.dart';
 import 'package:flutter_prueba_ibk/models/product.model.dart';
 
 class ProductDao {
@@ -14,6 +14,7 @@ class ProductDao {
             'nameMoney': nameMoney as String,
             'symbolMoney': symbolMoney as String,
             'amount': amount as String,
+            'isLogout': isLogout as int,
           }
           in productMaps)
         ProductModel(
@@ -23,6 +24,7 @@ class ProductDao {
           nameMoney: nameMoney,
           symbolMoney: symbolMoney,
           amount: amount,
+          isLogout: isLogout,
         ),
     ];
   }
@@ -39,9 +41,15 @@ class ProductDao {
         'nameMoney': value.nameMoney,
         'symbolMoney': value.symbolMoney,
         'amount': value.amount,
+        'isLogout': value.isLogout,
       });
     }
 
     await batch.commit(noResult: true);
+  }
+
+  Future<void> deleteAllProducts() async {
+    final db = await FinanceDatabase.database;
+    await db.delete('products');
   }
 }

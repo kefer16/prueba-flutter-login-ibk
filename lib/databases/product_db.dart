@@ -25,7 +25,8 @@ class FinanceDatabase {
             name TEXT,
             nameMoney TEXT,
             symbolMoney TEXT,
-            amount TEXT
+            amount TEXT,
+            isLogout INTEGER
           )
         ''');
       },
